@@ -184,7 +184,7 @@ html.cs-on .cs-keep { text-shadow: none !important; }
 /* a bubble that holds an open Google popup (tooltip, menu, dialog): no transform / filter / animation / opacity,
    which would move the popup or make it see-through, and it sits above its neighbours */
 html.cs-on .cs-msg.cs-hold { transform: none !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; animation: none !important; opacity: 1 !important; }
-html.cs-on .cs-msg.cs-pos.cs-hold { z-index: 60 !important; }
+html.cs-on .cs-msg.cs-pos.cs-hold:not(.cs-popup-raised) { z-index: 60 !important; }
 html.cs-on .cs-ontop { z-index: 1000 !important; }
 @keyframes cs-sheen2 { 0% { background-position: 150% 0, 0 0 } 60%, 100% { background-position: -100% 0, 0 0 } }
 
@@ -270,9 +270,10 @@ html.cs-mail tr.zA.zE { background: rgba(255,255,255,.85) !important; }
 /* bubbles: WhatsApp colours come from the theme; the first bubble of each run gets the little tail and a square corner */
 html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="l"] { border-top-left-radius: 0 !important; }
 html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="r"] { border-top-right-radius: 0 !important; }
-html.cs-wa.cs-on .cs-msg.cs-pos.cs-first[data-cs-edge]:not(.cs-hold)::after { content: ""; position: absolute; top: 0; width: 8px; height: 13px; background: var(--cs-wb, #fff); pointer-events: none; }
-html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="l"]::after { left: -8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
-html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="r"]::after { right: -8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+/* Keep Google's full-bubble hover ::after intact; our tail owns its own node. */
+html.cs-wa.cs-on .cs-msg > .cs-wa-tail { position: absolute; inset: 0 auto auto; display: block; width: 8px; height: 13px; background: var(--cs-wb, #fff); pointer-events: none; }
+html.cs-wa.cs-on .cs-msg[data-cs-edge="l"] > .cs-wa-tail { left: -8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+html.cs-wa.cs-on .cs-msg[data-cs-edge="r"] > .cs-wa-tail { right: -8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
 
 /* A dedicated footer keeps time/ticks separate from RTL text, links and emoji.
    Normal flow lets the bubble grow and never overlaps a neighbouring popup. */

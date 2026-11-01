@@ -1,0 +1,19 @@
+PASS Runtime initialized
+PASS 1177 themes / 688 backgrounds
+PASS 5 message bubbles detected
+PASS No inline HTML required by Trusted Types
+PASS WhatsApp own-message colors
+PASS Time and ticks occupy a separate footer
+PASS Original timestamp is visually hidden
+PASS Turning off ticks restores original timestamps
+PASS SVG wallpaper exists
+PASS Read detection rejects unread
+PASS Four panel tabs
+PASS Reaction tooltip above next message
+PASS Closing restores popup ancestor layers
+PASS Quote hover overlay has no triangular clipping
+PASS WhatsApp tail owns a separate small node
+PASS CSS-only reaction popup is raised on focus
+PASS Popup priority overrides held bubble priority
+PASS CSS-only popup closes without leaving raised layers
+PASS Disable removes styled bubbles

@@ -227,7 +227,7 @@
         el('button', { type: 'button', class: 'cs-ib', onclick: resetAll }, icon('reset'), l.reset)),
       el('a', { class: 'cs-credit', href: 'https://mitmachim.top/user/%D7%9C%D7%A9%D7%9B%D7%AA-%D7%94%D7%A8%D7%91', target: '_blank', rel: 'noopener noreferrer', title: 'לשכת הרב' },
         icon('sparkle'), el('b', null, 'כל הזכויות שמורות בס"ד: לשכת הרב')),
-      el('div',{class:'cs-credit'},icon('sparkle'),el('b',null,S.lang==='he'?'גרסת הסקריפט והתוספות: פרוזי':'Userscript conversion & additions: Prozi')),
+      el('div',{class:'cs-credit'},icon('sparkle'),el('b',null,S.lang==='he'?'גרסת הסקריפט והתוספות: ':'Userscript conversion & additions: ',el('a',{href:'https://mitmachim.top/user/%D7%A4%D7%A8%D7%95%D7%96%D7%99',target:'_blank',rel:'noopener noreferrer'},S.lang==='he'?'פרוזי':'Prozi'))),
       ...backupControls(el, S.lang),
       el('div',{class:'cs-note',dir:'ltr'},'Chat Studio '+CS_VERSION)
     ];
@@ -481,7 +481,7 @@
   const pending = new Set();
   const touched = new Set();
   const chipBoxes = new Set();
-  const OWN_CLS = ['cs-asset', 'cs-root', 'cs-toast', 'cs-fx', 'cs-imglayer', 'cs-wa-meta', 'cs-bgl'];
+  const OWN_CLS = ['cs-asset', 'cs-root', 'cs-toast', 'cs-fx', 'cs-imglayer', 'cs-wa-meta', 'cs-wa-tail', 'cs-bgl'];
   const OWN = n => n.id === 'cs-panel' || n.id === 'cs-dyn' || (n.classList && OWN_CLS.some(c => n.classList.contains(c)));
   function run() {
     scheduled = false;

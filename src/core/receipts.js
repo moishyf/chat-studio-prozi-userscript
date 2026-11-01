@@ -31,6 +31,9 @@
       const side = b.getAttribute('data-cs-side'), from = b.dataset.csFrom || '';
       const first = !prev || prev.side !== side || (!!from && !!prev.from && from !== prev.from);
       if (b.classList.contains('cs-first') !== first) b.classList.toggle('cs-first', first);
+      let tail=b.querySelector(':scope > .cs-wa-tail');
+      if(isWA() && first){if(!tail)b.append(el('span',{class:'cs-wa-tail','aria-hidden':'true'}));}
+      else tail?.remove();
       prev = { side, from };
     }
   }
@@ -144,6 +147,7 @@
   }
   function updateMeta() {
     const want = metaWanted(), showTicks = ticksOn();
+    if(!isWA() || !want)document.querySelectorAll('.cs-wa-tail').forEach(e=>e.remove());
     if (!showTicks) {
       document.querySelectorAll('.cs-wa-meta').forEach(e => e.remove());
       document.querySelectorAll('.cs-time-source').forEach(e => e.classList.remove('cs-time-source'));

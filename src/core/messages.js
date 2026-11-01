@@ -110,7 +110,7 @@
       let abs = false;
       for (const d of bub.querySelectorAll('*')) {
         if (doneEl.has(d)) continue;
-        if (d.classList.contains('cs-wa-meta') || d.closest('.cs-keep,.cs-wa-meta')) { settle(d); continue; }
+        if (d.matches('.cs-wa-meta,.cs-wa-tail') || d.closest('.cs-keep,.cs-wa-meta')) { settle(d); continue; }
         if (d.matches(POP) || d.querySelector(POP)) { W.push([d, 'keep']); settle(d); continue; }
         const tag = d.tagName;
         if (d.namespaceURI === SVGNS || tag === 'IMG' || tag === 'VIDEO' || tag === 'CANVAS') { doneEl.add(d); continue; }
@@ -165,6 +165,7 @@
   function untagAll() {
     visIO.disconnect();
     document.querySelectorAll('.cs-wa-meta').forEach(e => e.remove());
+    document.querySelectorAll('.cs-wa-tail').forEach(e => e.remove());
     document.querySelectorAll('.cs-time-source').forEach(e => e.classList.remove('cs-time-source'));
     document.querySelectorAll('.cs-msg').forEach(m => {
       m.classList.remove('cs-msg', 'cs-new', 'cs-me', 'cs-them', 'cs-self', 'cs-first', 'cs-wrap', 'cs-solo', 'cs-pos', 'cs-rel', 'cs-vis', 'cs-hold');

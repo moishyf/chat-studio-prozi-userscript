@@ -4,7 +4,7 @@
  */
 function createPopupGuard(root=document) {
   const selector='[role="tooltip"],[role="menu"],[role="dialog"],[role="alertdialog"],[role="listbox"]';
-  const candidates=new Set(),applied=new Map();let observer=null,frame=0;
+  const candidates=new Set(),applied=new Map(),timers=new Set();let observer=null,frame=0;
   const own=e=>e.closest?.('#cs-panel,.cs-root,.cs-asset,.cs-imglayer,.cs-wa-meta');
   function collect(e){if(!e?.querySelectorAll||own(e))return;if(e.matches?.(selector))candidates.add(e);for(const p of e.querySelectorAll(selector))if(!own(p))candidates.add(p);}
   const open=e=>e.isConnected&&!e.hidden&&e.getAttribute('aria-hidden')!=='true'&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none';
@@ -32,6 +32,17 @@ function createPopupGuard(root=document) {
     applied.clear();for(const [e,classes]of desired)applied.set(e,classes);
   }
   const schedule=()=>{if(!frame)frame=requestAnimationFrame(sync);};
+  // Google also reveals existing reaction cards with :hover/:focus and CSS
+  // delays, without any DOM mutation. Recheck those interactions and transitions.
+  const events=['pointerover','pointerout','focusin','focusout','transitionrun','transitionend','animationstart','animationend'];
+  function interaction(event){
+    const target=event.target;if(!target?.closest||own(target))return;
+    const scope=target.closest('[data-message-id],[data-topic-id],[role="listitem"],c-wiz[data-id]')||target;
+    if(!scope.matches?.(selector)&&!scope.querySelector?.(selector)&&!applied.size)return;
+    collect(scope);schedule();
+    for(const timer of timers)clearTimeout(timer);timers.clear();
+    for(const delay of [80,350,800]){const timer=setTimeout(()=>{timers.delete(timer);schedule();},delay);timers.add(timer);}
+  }
   const stripped=s=>(s||'').split(/\s+/).filter(c=>c&&!c.startsWith('cs-')).sort().join(' ');
   function start(){
     if(observer)return;collect(root);
@@ -47,9 +58,10 @@ function createPopupGuard(root=document) {
       if(relevant)schedule();
     });
     observer.observe(root.documentElement||root,{subtree:true,childList:true,attributes:true,attributeOldValue:true,attributeFilter:['hidden','aria-hidden','style','class','role']});
+    for(const event of events)root.addEventListener(event,interaction,true);
     schedule();
   }
-  function stop(){observer?.disconnect();observer=null;cancelAnimationFrame(frame);frame=0;for(const [e,classes]of applied)e.classList.remove(...classes);applied.clear();candidates.clear();}
+  function stop(){observer?.disconnect();observer=null;cancelAnimationFrame(frame);frame=0;for(const timer of timers)clearTimeout(timer);timers.clear();for(const event of events)root.removeEventListener(event,interaction,true);for(const [e,classes]of applied)e.classList.remove(...classes);applied.clear();candidates.clear();}
   return {start,stop,sync};
 }
 const popupGuard=createPopupGuard();

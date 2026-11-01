@@ -14,6 +14,7 @@
     H.classList.toggle('cs-lite', !!G.lite);
     H.classList.toggle('cs-wa', isWAId(id));
     H.classList.toggle('cs-wadk', id === 'k:wadark');
+    if(!isWAId(id))document.querySelectorAll('.cs-wa-tail').forEach(e=>e.remove());
     setCSS(buildCSS());
     if (!document.body) return;
     startObs();
