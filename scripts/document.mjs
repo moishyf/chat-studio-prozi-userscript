@@ -24,7 +24,7 @@ const groups=[
  ['מסגרות fallback','ברקע','IS_CHAT / IS_MAIL / IN_GMAIL','ללא','context-state.js','אין תחליף מוכח ל־match_origin_as_fallback; חסם שחרור'],
  ['כמה חלונות, שרשורים ומעבר שיחה','ברקע','liveAreas, panes, areaOf, run','DOM בלבד','chat-background.js / ui.js','לוגיקת המקור נשמרה; בדיקות Google ממתינות'],
  ['זיהוי הודעות חדשות וניקוי','ברקע','tagMessages, untagAll, cleanup','DOM בלבד','messages.js / apply.js','זיהוי 5 הודעות וכיבוי: עבר ב־fixture'],
- ['חלוניות צפות, תפריטים ותגובות','בריחוף/קליק','scanInner, floatCard, createPopupGuard','DOM בלבד','messages.js / runtime/popups.js','תיקון הוספה/נראות ושכבות אבות; ראו TEST_REPORT'],
+ ['חלוניות צפות, תפריטים ותגובות','בריחוף/קליק','scanInner, floatCard, createPopupGuard','DOM בלבד','messages.js / runtime/popups.js','תיקון חלונית המגיבים ב־beta.4 אושר בידי המשתמש ב־Gmail חי; ראו TEST_REPORT'],
  ['שיתוף עיצוב','הגדרות → שיתוף','copyCode, loadCode','CS5 / CS6','ui.js','פורמט המקור נשמר; נוספה בדיקת תקינות'],
  ['גיבוי מלא וייבוא','הגדרות → גיבוי','exportBackup, validateBackup, backupControls','סכמה 1','runtime/backup.js','תוספת; בדיקות קלט זדוני/חסר עברו'],
  ['איפוס והפתעה','ראש חלונית / הגדרות','resetAll, surprise','cs6 / cs6prof','ui.js','התנהגות המקור נשמרה'],
