@@ -3,6 +3,9 @@ PASS 1177 themes / 688 backgrounds
 PASS 5 message bubbles detected
 PASS No inline HTML required by Trusted Types
 PASS WhatsApp own-message colors
+PASS Time and ticks occupy a separate footer
+PASS Original timestamp is visually hidden
+PASS Turning off ticks restores original timestamps
 PASS SVG wallpaper exists
 PASS Read detection rejects unread
 PASS Four panel tabs

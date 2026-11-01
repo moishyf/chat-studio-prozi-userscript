@@ -165,6 +165,7 @@
   function untagAll() {
     visIO.disconnect();
     document.querySelectorAll('.cs-wa-meta').forEach(e => e.remove());
+    document.querySelectorAll('.cs-time-source').forEach(e => e.classList.remove('cs-time-source'));
     document.querySelectorAll('.cs-msg').forEach(m => {
       m.classList.remove('cs-msg', 'cs-new', 'cs-me', 'cs-them', 'cs-self', 'cs-first', 'cs-wrap', 'cs-solo', 'cs-pos', 'cs-rel', 'cs-vis', 'cs-hold');
       for (const a of ['data-cs-side', 'data-cs-edge', 'data-cs-hue', 'data-cs-from', 'data-cs-abs', 'data-cs-mine', 'data-cs-time']) m.removeAttribute(a);

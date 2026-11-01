@@ -570,6 +570,7 @@
     if (d[XKEY] && Array.isArray(d[XKEY].x)) IMGIX = d[XKEY].x;
     else if (store) { const tmp = { g: G, p: PROF }; IMGIX = await migrateImages(tmp); save('g', 'p'); }
     if (upgrade) { G.liveAnim = true; G._v = 15; save('g'); } // bubbles animate by default (only the ones on screen)
+    startAccountBridge();
     registerAccount();
     recompute();
     applyAll();                     // the theme's CSS is in place before Chat draws its first message

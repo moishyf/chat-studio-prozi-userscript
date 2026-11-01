@@ -4,7 +4,7 @@
 
 ![Chat Studio בסביבת הדגמה](docs/images/hero.jpg)
 
-**גרסת פיתוח: 15.3.1-beta.1.** אינה שחרור יציב. [דוח הבדיקות](TEST_REPORT.md) מפריד בין בדיקות קוד, fixture בדפדפן ותרחישים שטרם אומתו.
+**גרסת פיתוח: 15.3.1-beta.2.** אינה שחרור יציב. [דוח הבדיקות](TEST_REPORT.md) מפריד בין בדיקות קוד, fixture בדפדפן ותרחישים שטרם אומתו.
 
 [קובץ הסקריפט](dist/chat-studio.user.js) · [מדריך התקנה](docs/installation.md) · [מדריך משתמש](docs/user-guide.md) · [קוד אתר התיעוד](website/index.html) · [הסבר V15.3 המקורי](docs/original/Chat-Studio-V15.3-הסבר.txt)
 
@@ -44,7 +44,7 @@ Node.js 22 ומעלה; אין חבילות להתקנה. פתחו `http://127.0.
 
 ## עדכונים
 
-קובצי user.js ו־meta.js נוצרים יחד וכוללים כתובות קבועות בענף main. כל עוד המאגר פרטי אין קישור התקנה אנונימי. CI מוודא תוצר עקבי; שחרור יציב חסום עד השלמת בדיקות Google ו־Tampermonkey. אין הבטחת עדכון מיידי — התזמון תלוי ב־Tampermonkey. [פרטים](docs/updating.md).
+קובצי user.js ו־meta.js נוצרים יחד וכוללים כתובות קבועות בענף main. [התקנת בטא](https://raw.githubusercontent.com/moishyf/chat-studio-prozi-userscript/main/dist/chat-studio.user.js) · [אתר התיעוד](https://moishyf.github.io/chat-studio-prozi-userscript/). CI מוודא תוצר עקבי; שחרור יציב חסום עד השלמת בדיקות Google ו־Tampermonkey. אין הבטחת עדכון מיידי — התזמון תלוי ב־Tampermonkey. [פרטים](docs/updating.md).
 
 ## קרדיטים וזכויות
 

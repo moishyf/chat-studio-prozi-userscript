@@ -1,6 +1,45 @@
   /* ---------- accounts ---------- */
   const EMAIL_RE = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/;
   let pageAcct = null; // { email, name } read from this page (top frames only)
+  let parentAcct = null, parentAcctAt = 0, parentRequest = '', parentRequestedAt = 0;
+  const accountIndexIn = url => {
+    try {
+      const u = new URL(url), m = u.pathname.match(/\/u\/(\d+)(?=\/|$)/);
+      if (!m) return null;
+      const auth = u.searchParams.get('authuser');
+      return auth !== null && auth !== m[1] ? null : Number(m[1]);
+    } catch { return null; }
+  };
+  function requestParentAccount() {
+    if (IS_TOP || !IN_GMAIL || Date.now() - parentRequestedAt < 1500) return;
+    parentRequestedAt = Date.now();
+    parentRequest = crypto.randomUUID();
+    window.parent.postMessage({type:'chat-studio:account-request',nonce:parentRequest},'https://mail.google.com');
+  }
+  function startAccountBridge() {
+    // Live, per-tab handshake. Never infer a private profile from a global /u/N cache.
+    addEventListener('message',event=>{
+      const msg=event.data;
+      if (!msg || typeof msg!=='object') return;
+      if (IS_MAIL && msg.type==='chat-studio:account-request') {
+        if (event.origin!=='https://chat.google.com' || typeof msg.nonce!=='string' || msg.nonce.length>80) return;
+        const frame=[...document.querySelectorAll('iframe')].find(f=>f.contentWindow===event.source);
+        if (!frame) return;
+        let url;try{url=new URL(frame.src);}catch{return;}
+        const idx=accountIndexIn(location.href);
+        if (url.origin!==event.origin || idx===null || accountIndexIn(url.href)!==idx) return;
+        event.source.postMessage({type:'chat-studio:account-response',nonce:msg.nonce,account:readPageAccount()},event.origin);
+      } else if (!IS_TOP && IN_GMAIL && msg.type==='chat-studio:account-response') {
+        if(event.source!==window.parent || event.origin!=='https://mail.google.com' || !parentRequest || msg.nonce!==parentRequest)return;
+        parentRequest='';
+        const a=msg.account;
+        parentAcct=a && typeof a.email==='string' && a.email.match(EMAIL_RE)?.[0]===a.email ? {email:a.email.toLowerCase(),name:typeof a.name==='string'?a.name.slice(0,120):''} : null;
+        parentAcctAt=Date.now();
+        const before=curEmail();registerAccount();recompute();applyAll();
+        if(before!==curEmail() && panel)refreshPanel();
+      }
+    });
+  }
   /* Google's apps embed the signed-in address in the page data (WIZ_global_data "oPEP7c"; Gmail's GLOBALS) — works in every frame */
   function readFrameEmail() {
     try {
@@ -27,6 +66,7 @@
     }
     const w = readFrameEmail();
     if (w && !email) email = w;
+    if (!email && !IS_TOP && IN_GMAIL && parentAcct && Date.now()-parentAcctAt<10000) return parentAcct;
     return email ? { email, name } : null;
   }
   /* the e-mail of the account this page belongs to (frames learn it from the top page through storage) */
@@ -67,6 +107,7 @@
   /* remember this account: top pages read the e-mail from Google's account button; frames get it from them */
   let regTries = 0;
   function registerAccount() {
+    requestParentAccount();
     const p = readPageAccount(); pageAcct = p;
     const now = Date.now();
     if (pageAcct) {

@@ -113,6 +113,12 @@
   };
   function setMeta(b, state, t) {
     const host = b.classList.contains('cs-txt') ? b : (b.querySelector('.cs-txt') || b);
+    // Hide only Google's dedicated timestamp nodes, preserving sender names,
+    // accessible source text and the original DOM for cleanup.
+    const box = b.closest(BOX);
+    if (t && box) for (const source of box.querySelectorAll('[data-absolute-timestamp]')) {
+      if (!b.contains(source) && source.closest(BOX) === box) source.classList.add('cs-time-source');
+    }
     let m = host.querySelector(':scope > .cs-wa-meta');
     const key = `${t}|${state}`;
     if (m && m.dataset.k === key) { if (m !== host.lastChild) host.appendChild(m); return; }
@@ -138,7 +144,10 @@
   }
   function updateMeta() {
     const want = metaWanted(), showTicks = ticksOn();
-    if (!showTicks && document.querySelector('.cs-wa-meta')) document.querySelectorAll('.cs-wa-meta').forEach(e => e.remove());
+    if (!showTicks) {
+      document.querySelectorAll('.cs-wa-meta').forEach(e => e.remove());
+      document.querySelectorAll('.cs-time-source').forEach(e => e.classList.remove('cs-time-source'));
+    }
     if (!want) return;
     let sending = false;
     for (const a of liveAreas()) {

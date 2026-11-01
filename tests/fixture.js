@@ -16,8 +16,15 @@ document.getElementById('run-checks').onclick=async()=>{
  check('1177 themes / 688 backgrounds',api.ALL_THEMES.length===1177&&api.ALL_BGS===688);
  check('5 message bubbles detected',document.querySelectorAll('.cs-msg').length===5);
  check('No inline HTML required by Trusted Types',!!document.querySelector('#cs-dyn'));
- api.pickTheme('k:wa');await new Promise(r=>setTimeout(r,1000));
+ api.update({ticks:'wa',lite:false});api.pickTheme('k:wa');await new Promise(r=>setTimeout(r,1000));
  check('WhatsApp own-message colors',getComputedStyle(document.querySelector('.self .cs-msg')).backgroundColor==='rgb(217, 253, 211)');
+ const footer=document.querySelector('.self .cs-wa-meta'),textHost=footer?.parentElement;
+ const textRange=document.createRange();if(textHost){textRange.selectNodeContents(textHost);textRange.setEndBefore(footer);}
+ check('Time and ticks occupy a separate footer',!!footer&&footer.getBoundingClientRect().top>=textRange.getBoundingClientRect().bottom);
+ check('Original timestamp is visually hidden',document.querySelectorAll('.cs-time-source').length===5);
+ api.update({ticks:'off'});await new Promise(r=>setTimeout(r,500));
+ check('Turning off ticks restores original timestamps',!document.querySelector('.cs-time-source,.cs-wa-meta'));
+ api.update({ticks:'wa'});
  check('SVG wallpaper exists',params.has('original')||!!document.querySelector('#chat-pane .cs-asset path'));
  check('Read detection rejects unread',!api.isSeenLabel('mark as unread')&&api.isSeenLabel('Read by Demo'));
  api.open();check('Four panel tabs',document.querySelectorAll('#cs-panel .cs-tab').length===4);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));api.close();await new Promise(r=>setTimeout(r,450));
@@ -30,7 +37,7 @@ document.getElementById('run-checks').onclick=async()=>{
  const hit=document.elementFromPoint(r.left+r.width/2,Math.min(r.bottom-5,viewport.bottom-5));
  check('Reaction tooltip above next message',!!hit&&(hit===tooltip||tooltip.contains(hit)));
  if(!hit||!(hit===tooltip||tooltip.contains(hit)))lines.push('DETAIL '+JSON.stringify({rect:[r.top,r.bottom],viewport:[viewport.top,viewport.bottom],hit:hit?.className,raised:document.querySelectorAll('.cs-popup-raised').length}));
- tooltip.hidden=true;await new Promise(r=>setTimeout(r,150));
+ tooltip.hidden=true;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
  check('Closing restores popup ancestor layers',document.querySelectorAll('.cs-popup-raised').length===0);
  document.querySelectorAll('article').forEach(e=>{e.style.isolation='';e.style.alignItems='';});
  api.update({onChat:false});check('Disable removes styled bubbles',document.querySelectorAll('.cs-msg').length===0);api.update({onChat:true});

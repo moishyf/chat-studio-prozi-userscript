@@ -68,6 +68,33 @@ test('backup rejects active content, invalid URLs, missing images and bad schema
  for(const values of [{cs6:{custom:{a:'red; color:red',b:'#123456',c:'#123456'}}},{cs7imgs:{x:[{id:'x',t:'d'}]}},{cs7imgs:{x:[{id:'x',t:'u',u:'javascript:alert(1)'}]}}])assert.throws(()=>validate({...b,values}));
  assert.throws(()=>validate({...b,schema:2}));
 });
+
+test('Gmail identity bridge verifies origin, frame source and account route',()=>{
+ let receive;const replies=[];const sourceWindow={postMessage:(msg,origin)=>replies.push({msg,origin})};
+ const frame={src:'https://chat.google.com/u/0/frame',contentWindow:sourceWindow};
+ const ctx={URL,IS_MAIL:true,IS_TOP:true,IN_GMAIL:false,location:{href:'https://mail.google.com/mail/u/0/'},addEventListener:(type,fn)=>receive=fn,
+ document:{scripts:[],querySelectorAll:()=>[frame],querySelector:()=>({getAttribute:()=> 'Google Account: Demo (demo@example.test)'})}};
+ vm.runInNewContext(read('src/core/accounts.js')+';startAccountBridge()',ctx);
+ const event={origin:'https://chat.google.com',source:sourceWindow,data:{type:'chat-studio:account-request',nonce:'test'}};
+ receive({...event,origin:'https://example.com'});receive({...event,source:{}});
+ frame.src='https://chat.google.com/u/1/frame';receive(event);
+ frame.src='https://chat.google.com/u/0/frame?authuser=1';receive(event);
+ assert.equal(replies.length,0);
+ frame.src='https://chat.google.com/u/0/frame';receive(event);
+ assert.equal(replies.length,1);assert.equal(replies[0].msg.account.email,'demo@example.test');assert.equal(replies[0].origin,'https://chat.google.com');
+});
+
+test('Chat frame only accepts its live parent response with matching nonce',()=>{
+ let receive,request;const parent={postMessage:msg=>request=msg};
+ const ctx={URL,IS_MAIL:false,IS_TOP:false,IN_GMAIL:true,IS_CHAT:true,ACCT_IDX:0,PROF:{},G:{},editKey:null,panel:null,ACCTS:{'demo@example.test':{email:'demo@example.test',idx:0,name:'Demo',seen:Date.now()}},
+ crypto:{randomUUID:()=> 'fresh-nonce'},window:{parent},document:{scripts:[]},addEventListener:(type,fn)=>receive=fn,applyAll:()=>{},setTimeout:()=>0,clearTimeout:()=>{}};
+ const api=vm.runInNewContext(read('src/core/accounts.js')+';startAccountBridge();requestParentAccount();({readPageAccount})',ctx);
+ const event={origin:'https://mail.google.com',source:parent,data:{type:'chat-studio:account-response',nonce:request.nonce,account:{email:'demo@example.test',name:'Demo'}}};
+ receive({...event,source:{}});receive({...event,origin:'https://example.com'});receive({...event,data:{...event.data,nonce:'old-nonce'}});
+ assert.equal(api.readPageAccount(),null);
+ receive(event);assert.equal(api.readPageAccount().email,'demo@example.test');
+ receive({...event,data:{...event.data,account:{email:'wrong@example.test'}}});assert.equal(api.readPageAccount().email,'demo@example.test');
+});
 test('distribution is standalone and has narrow grants and matching metadata',()=>{
  const s=read('dist/chat-studio.user.js'),meta=read('dist/chat-studio.meta.js');assert.ok(s.startsWith(meta));
  assert.ok(!s.includes('chrome-extension://'));assert.ok(!/\bchrome\.(storage|runtime)/.test(s));assert.ok(!/@require|@connect\s+\*/.test(meta));

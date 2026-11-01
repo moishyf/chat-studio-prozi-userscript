@@ -274,12 +274,14 @@ html.cs-wa.cs-on .cs-msg.cs-pos.cs-first[data-cs-edge]:not(.cs-hold)::after { co
 html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="l"]::after { left: -8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
 html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="r"]::after { right: -8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
 
-/* time + ticks inside the bubble, at the end of the last line (moves to its own line only when there is no room).
-   Not positioned, so it can never cover a Google popup from a neighbouring message. */
-.cs-wa-meta { float: inline-end; display: inline-flex; align-items: center; gap: 3px; height: 15px; margin: 3px 0 -5px; margin-inline-start: 10px;
+/* A dedicated footer keeps time/ticks separate from RTL text, links and emoji.
+   Normal flow lets the bubble grow and never overlaps a neighbouring popup. */
+.cs-wa-meta { float: none; clear: both; display: flex; justify-content: flex-end; align-items: center; gap: 3px; min-height: 15px; margin: 4px 0 0;
   font: 400 11px/15px system-ui, "Segoe UI", Helvetica, Arial, sans-serif !important; letter-spacing: 0; white-space: nowrap; direction: ltr; text-shadow: none !important;
   color: color-mix(in srgb, currentColor 58%, transparent); pointer-events: none; user-select: none; -webkit-user-select: none; }
 .cs-wa-time { font-variant-numeric: tabular-nums; }
+.cs-txt:dir(rtl) > .cs-wa-meta { justify-content: flex-start; }
+.cs-time-source { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip-path: inset(50%) !important; white-space: nowrap !important; }
 html.cs-wa .cs-wa-meta { color: #667781; }
 html.cs-wa.cs-wadk .cs-wa-meta { color: rgba(233,237,239,.6); }
 .cs-tick { width: 16px; height: 11px; flex: none; transition: color .4s ease; }
