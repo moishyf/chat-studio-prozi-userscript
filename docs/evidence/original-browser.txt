@@ -1,0 +1,12 @@
+PASS Runtime initialized
+PASS 1177 themes / 688 backgrounds
+PASS 5 message bubbles detected
+PASS No inline HTML required by Trusted Types
+PASS WhatsApp own-message colors
+PASS SVG wallpaper exists
+PASS Read detection rejects unread
+PASS Four panel tabs
+FAIL Reaction tooltip above next message
+DETAIL {"rect":[303.6499938964844,384.1999969482422],"viewport":[179.35000610351562,485.3500061035156],"hit":"cs-txt","raised":0}
+PASS Closing restores popup ancestor layers
+PASS Disable removes styled bubbles

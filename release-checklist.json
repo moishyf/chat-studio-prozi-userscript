@@ -1,0 +1,12 @@
+{
+  "googleChat": false,
+  "gmailChat": false,
+  "gmailInbox": false,
+  "multipleAccounts": false,
+  "tampermonkeyInstall": false,
+  "tampermonkeyUpdatePreservesData": false,
+  "frameFallback": false,
+  "coldAndWarmStart": false,
+  "longSessionPerformance": false,
+  "evidence": "TEST_REPORT.md"
+}

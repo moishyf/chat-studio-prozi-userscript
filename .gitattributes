@@ -1,0 +1,5 @@
+* text=auto eol=lf
+original/v15.3/** -text
+original/SHA256.json text eol=lf
+*.jpg -text
+*.png -text

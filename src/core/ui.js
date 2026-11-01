@@ -245,6 +245,7 @@
     const pos = panel ? [panel.style.left, panel.style.top, panel.style.transformOrigin] : null;
     const focusSearch = panel && document.activeElement && document.activeElement.type === 'search' && panel.contains(document.activeElement);
     if (panel) panel.remove();
+    for(const target of assetLayers.keys()) if(!target.isConnected) clearEmbedded(target);
 
     const body = el('div', { class: 'cs-body' }, editBar(), S.tab === 'bg' ? tabBg() : S.tab === 'fx' ? tabFx() : S.tab === 'set' ? tabSet() : tabThemes());
     const tab = (k, ic, lbl) => el('button', { type: 'button', class: 'cs-tab' + (S.tab === k ? ' cs-on' : ''), onclick: () => setUI({ tab: k }) }, icon(ic), lbl);
@@ -277,6 +278,7 @@
 
   /* a change goes to the look being edited: the default look, or one account's own look */
   function applyPatch(patch) {
+    pageAcct = readPageAccount(); recompute();
     const tgt = editKey && PROF[editKey];
     let p = false, g = false;
     for (const k in patch) {
@@ -308,14 +310,15 @@
 
   /* ---------- images ---------- */
   const MAX_IMGS = 12;
-  function addImg(entry, data) {
+  async function addImg(entry, data) {
     const put = {};
     if (data) put[IPFX + entry.id] = data;
-    IMGIX = [entry, ...IMGIX.filter(x => x.id !== entry.id && !(entry.u && x.u === entry.u))];
-    const gone = IMGIX.slice(MAX_IMGS); IMGIX = IMGIX.slice(0, MAX_IMGS);
+    const next = [entry, ...IMGIX.filter(x => x.id !== entry.id && !(entry.u && x.u === entry.u))];
+    const gone = next.slice(MAX_IMGS);
+    put[XKEY] = { _w: FID, x: next.slice(0, MAX_IMGS) };
+    try { await store.set(put); } catch { return; }
+    IMGIX = next.slice(0, MAX_IMGS);
     for (const g of gone) forgetImg(g.id);
-    put[XKEY] = { _w: FID, x: IMGIX };
-    try { store && store.set(put); } catch {}
     sources.delete(entry.id);
     update({ bg: 'img:' + entry.id, scope: 'all', bgCat: 'mine' });
     toast(L().saved);
@@ -348,7 +351,8 @@
       const k = Math.min(1, 2560 / Math.max(bmp.width, bmp.height));
       const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
       c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
-      addImg({ id: newId(), t: 'd', th: makeThumb(c) }, c.toDataURL('image/jpeg', 0.9));
+      await addImg({ id: newId(), t: 'd', th: makeThumb(c) }, c.toDataURL('image/jpeg', 0.9));
+      bmp.close();
     } catch { toast(L().badUrl); }
   }
 
@@ -369,6 +373,7 @@
       const o = JSON.parse(decodeURIComponent(escape(atob(v.slice(4)))));
       const patch = {}; for (const k of SHARE_KEYS) if (k in o && typeof o[k] === typeof DEFAULTS[k]) patch[k] = o[k];
       if (typeof patch.bg === 'string' && patch.bg.startsWith('img:')) delete patch.bg;
+      validateBackup({format:BACKUP_FORMAT,schema:1,values:{cs6:patch}});
       update(patch, true); toast(L().loaded);
     } catch { toast(L().badCode); }
   }
@@ -578,7 +583,7 @@
       setInterval(() => idle(() => {
         if (document.hidden) return;
         tick++;
-        if ((IS_TOP || IS_CHAT) && (!pageAcct || (IS_TOP && tick % 8 === 0))) { const before = meKey(), had = !!pageAcct; registerAccount(); if (meKey() !== before) { recompute(); applyAll(); } if (!had && pageAcct && panel) refreshPanel(); }
+        if (IS_TOP || IS_CHAT) { const before = meKey(), had = pageAcct?.email; registerAccount(); if (meKey() !== before) { recompute(); applyAll(); } if (had !== pageAcct?.email && panel) refreshPanel(); }
         if (tiny()) return;
         if (IS_CHAT) {
           injectButtons();

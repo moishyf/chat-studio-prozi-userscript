@@ -50,7 +50,7 @@ const header=`// ==UserScript==
 // @downloadURL  https://raw.githubusercontent.com/${repo}/main/dist/chat-studio.user.js
 // ==/UserScript==
 `;
-const runtime=['storage','assets','accounts','platform','backup'].map(n=>read('src/runtime/'+n+'.js')).join('\n');
+const runtime=['storage','assets','accounts','platform','backup','popups'].map(n=>read('src/runtime/'+n+'.js')).join('\n');
 const core=JSON.parse(read('src/order.json')).map(p=>read('src/'+p)).join('\n');
 const script=header+`\n(()=>{'use strict';\nif(window.__chatStudioProzi)return;window.__chatStudioProzi=true;\nconst CS_VERSION=${JSON.stringify(pkg.version)},CS_HOME=${JSON.stringify(home)},CS_ASSETS=${JSON.stringify(assets)};\n${runtime}\nif(location.hostname==='ogs.google.com'){${read('src/runtime/account-menu.js')}\nreturn;}\nGM_addStyle(${JSON.stringify(read('src/styles.css'))});\nfunction start(){if(!document.documentElement){setTimeout(start,0);return;}\n${core}\n}\nstart();\n})();\n`;
 new vm.Script(script);

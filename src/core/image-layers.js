@@ -20,7 +20,9 @@
     const w = Ly.mode === 'fixed' ? innerWidth : Ly.box.clientWidth, h = Ly.mode === 'fixed' ? innerHeight : Ly.box.clientHeight;
     if (!w || !h) return;
     const dpr = Math.min(2, devicePixelRatio || 1), W = Math.round(w * dpr), Hh = Math.round(h * dpr);
-    Ly.cv.style.width = w + 'px'; Ly.cv.style.height = h + 'px';
+    // A pixel width feeds back into a flex/grid host's intrinsic minimum width.
+    // Keep layout relative to the host; bitmap resolution remains pixel based.
+    Ly.cv.style.width = '100%'; Ly.cv.style.maxWidth = '100%'; Ly.cv.style.height = h + 'px';
     if (Ly.mode === 'sticky') Ly.cv.style.marginBottom = (-h) + 'px';
     const op = R.bgOpacity, tone = R.bgTone, fit = R.bgFit;
     const key = `${W}x${Hh}|${op}|${tone}|${fit}|${Ly.src}`;

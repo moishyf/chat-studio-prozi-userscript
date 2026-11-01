@@ -20,13 +20,13 @@
     if (IS_TOP) {
       const a = document.querySelector('a[aria-label*="@"][href*="accounts.google.com"], a[aria-label*="@"][href*="SignOutOptions"], [data-ogsr-up] a[aria-label*="@"]');
       const lab = a ? a.getAttribute('aria-label') || '' : '';
-      const m = lab.match(EMAIL_RE) || (document.title || '').match(EMAIL_RE);
+      const m = lab.match(EMAIL_RE);
       if (m) email = m[0].toLowerCase();
       const nm = lab.replace(/[\u200e\u200f]/g, '').match(/:\s*([^\n(]+?)\s*[\n(]/);
       if (nm) name = nm[1].trim();
     }
     const w = readFrameEmail();
-    if (w) { if (email && email !== w) name = ''; email = w; }
+    if (w && !email) email = w;
     return email ? { email, name } : null;
   }
   /* the e-mail of the account this page belongs to (frames learn it from the top page through storage) */
@@ -90,6 +90,6 @@
     v.custom = { ...G.custom, ...(p.custom || {}) };
     return v;
   }
-  function recompute() { R = viewFor(meKey()); if (editKey && !onProf(editKey)) editKey = null; S = viewFor(editKey); }
+  function recompute() { R = viewFor(meKey()); if (editKey && (!onProf(editKey) || editKey !== curEmail())) editKey = null; S = viewFor(editKey); }
   const pickDesign = src => { const o = {}; for (const k of DESIGN_KEYS) o[k] = k === 'custom' ? { ...src.custom } : src[k]; return o; };
 

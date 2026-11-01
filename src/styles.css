@@ -372,6 +372,9 @@ html.cs-lite .cs-bar, html.cs-lite .cs-mglass, html.cs-lite .cs-msg { backdrop-f
 .cs-asset-fixed {position:fixed;inset:0;z-index:-1}
 .cs-asset-sticky {position:sticky;top:0;z-index:-1}
 .cs-card.cs-sel .cs-check {display:block}
+.cs-popup-raised {z-index:1000!important}
+.cs-popup-position {position:relative!important}
+.cs-popup-frozen {transform:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;opacity:1!important}
 .cs-check {display:none;position:absolute;top:8.5px;inset-inline-end:8.5px;width:11px;height:11px;z-index:4;pointer-events:none}
 #cs-panel :focus-visible{outline:2px solid #7c5cff;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){#cs-panel *, .cs-btn, .cs-btn::after {animation:none!important;transition:none!important}}

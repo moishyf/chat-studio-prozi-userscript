@@ -1,0 +1,29 @@
+name: Release verified version
+on:
+  workflow_dispatch:
+    inputs:
+      browser_checks_confirmed:
+        description: Google/Tampermonkey tests completed and evidence recorded
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  release:
+    if: inputs.browser_checks_confirmed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/release-gate.mjs
+      - run: npm run build && npm test
+      - run: git diff --exit-code -- dist src/assets/recipes.json
+      - name: Publish the version already reviewed on main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "v$VERSION" dist/chat-studio.user.js dist/chat-studio.meta.js dist/SHA256SUMS --target "$GITHUB_SHA" --title "Chat Studio $VERSION" --notes-file CHANGELOG.md

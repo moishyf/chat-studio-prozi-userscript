@@ -1,0 +1,3 @@
+Converted: 500 messages, 657 ms.
+Original: {"messages":500,"insertAndStyleMs":527,"mode":"original","note":"Single local sample, Lite mode; not a long-session benchmark"}
+Single local Lite-mode sample, not a long-session benchmark.

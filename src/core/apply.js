@@ -17,6 +17,7 @@
     setCSS(buildCSS());
     if (!document.body) return;
     startObs();
+    popupGuard.start();
     tagMessages([document]);
     applyBg();
     fxSync();
@@ -24,6 +25,7 @@
     if (cascadeAnim) cascade();
   }
   function cleanup() {
+    popupGuard.stop();
     H.classList.remove('cs-on', 'cs-bgmode', 'cs-bgdark', 'cs-wa', 'cs-wadk', 'cs-lite');
     if (dynStyle) { dynStyle.textContent = ''; lastCSS = ''; }
     clearBg(); untagAll(); fxStop();

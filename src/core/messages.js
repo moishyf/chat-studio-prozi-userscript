@@ -50,7 +50,7 @@
     const todo = [];
     for (const m of found) {
       if (m.hasAttribute('data-cs-c')) continue;
-      if (m.closest(EDITOR + ',#cs-panel,.cs-root')) { m.setAttribute('data-cs-c', 'x'); continue; }
+      if (m.closest(EDITOR + ',#cs-panel,.cs-root,' + POP)) { m.setAttribute('data-cs-c', 'x'); continue; }
       if (m.parentElement && m.parentElement.closest('[data-cs-c]')) continue;
       if (!m.textContent.trim() && !m.querySelector('img')) continue; // not filled yet: picked up again when its text arrives
       todo.push(m);
