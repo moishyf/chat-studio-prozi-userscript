@@ -39,7 +39,31 @@ out+='\n## אינדקס פונקציות מקור\n\n';
 for(const match of source.matchAll(/^  (?:async )?function (\w+)\(/gm))out+='- `'+match[1]+'` — שורה '+(source.slice(0,match.index).split('\n').length)+' ב־original/v15.3/content.js.\n';
 fs.writeFileSync('FEATURE_MATRIX.md',out);
 fs.mkdirSync('website/docs',{recursive:true});fs.mkdirSync('website/images',{recursive:true});
+fs.cpSync('docs/original','website/docs/original',{recursive:true});
 for(const file of fs.readdirSync('docs'))if(file.endsWith('.md'))fs.copyFileSync('docs/'+file,'website/docs/'+file);
 for(const file of ['FEATURE_MATRIX.md','CHANGELOG.md','TEST_REPORT.md'])if(fs.existsSync(file))fs.copyFileSync(file,'website/docs/'+file);
 for(const file of fs.readdirSync('docs/images'))fs.copyFileSync('docs/images/'+file,'website/images/'+file);
+// Publish readable static guide pages as well as the editable Markdown sources.
+const escape=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const inline=s=>escape(s).replace(/\[([^\]]+)\]\(([^)]+)\)/g,(_,label,url)=>{
+ if(!/^(https?:\/\/|[\w./#-])/.test(url))return label;
+ if(url.startsWith('docs/'))url='https://github.com/moishyf/chat-studio-prozi-userscript/blob/main/'+url;
+ else if(url.endsWith('.md')&&!url.startsWith('http'))url=url.replace(/\.md$/,'.html');
+ return `<a href="${url}">${label}</a>`;
+}).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+for(const file of fs.readdirSync('website/docs').filter(f=>f.endsWith('.md'))){
+ const lines=fs.readFileSync('website/docs/'+file,'utf8').split(/\r?\n/);let body='',list=false,code=false,table=false;
+ const close=()=>{if(list){body+='</ul>';list=false;}if(table){body+='</tbody></table></div>';table=false;}};
+ for(const line of lines){
+  if(line.startsWith('```')){close();body+=code?'</code></pre>':'<pre dir="ltr"><code>';code=!code;continue;}
+  if(code){body+=escape(line)+'\n';continue;}
+  if(line.startsWith('|')){if(!table){close();body+='<div class="doc-table"><table><tbody>';table=true;}if(/^\|[\s:|-]+\|$/.test(line))continue;body+='<tr>'+line.split('|').slice(1,-1).map(v=>'<td>'+inline(v.trim())+'</td>').join('')+'</tr>';continue;}
+  if(/^[-*] |^\d+\. /.test(line)){if(!list){close();body+='<ul>';list=true;}body+='<li>'+inline(line.replace(/^[-*] |^\d+\. /,''))+'</li>';continue;}
+  close();const heading=line.match(/^(#{1,4}) (.+)/);
+  if(heading)body+=`<h${heading[1].length}>${inline(heading[2])}</h${heading[1].length}>`;
+  else if(line.trim())body+='<p>'+inline(line)+'</p>';
+ }close();
+ const title=lines.find(l=>l.startsWith('# '))?.slice(2)||file;
+ fs.writeFileSync('website/docs/'+file.replace(/\.md$/,'.html'),`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(title)} · Chat Studio</title><link rel="stylesheet" href="../site.css"><style>article{max-width:900px;margin:50px auto;padding:0 24px 80px}article h1{font-size:42px;letter-spacing:-1px}article h2{margin-top:40px}article a{color:#6842bd;text-decoration:underline}article code{direction:ltr;unicode-bidi:embed;background:#eee9f6;padding:2px 5px;border-radius:5px}pre{overflow:auto;background:#eee9f6;padding:20px;border-radius:14px}pre code{padding:0}.doc-table{overflow:auto}td{border-bottom:1px solid #ddd3e8;padding:10px;vertical-align:top}tr:first-child{font-weight:bold}li{margin:9px 0}</style></head><body><nav><a class="brand" href="../index.html">✦ Chat Studio</a><a href="${file}">קובץ Markdown ↗</a></nav><article>${body}</article></body></html>`);
+}
 console.log('Feature matrix and website documentation synchronized.');

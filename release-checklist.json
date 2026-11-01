@@ -3,7 +3,7 @@
   "gmailChat": false,
   "gmailInbox": false,
   "multipleAccounts": false,
-  "tampermonkeyInstall": false,
+  "tampermonkeyInstall": true,
   "tampermonkeyUpdatePreservesData": false,
   "frameFallback": false,
   "coldAndWarmStart": false,
