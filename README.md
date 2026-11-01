@@ -4,7 +4,7 @@
 
 ![Chat Studio בסביבת הדגמה](docs/images/hero.jpg)
 
-**גרסת פיתוח: 15.3.1-beta.3.** אינה שחרור יציב. [דוח הבדיקות](TEST_REPORT.md) מפריד בין בדיקות קוד, fixture בדפדפן ותרחישים שטרם אומתו.
+**גרסת פיתוח: 15.3.1-beta.4.** אינה שחרור יציב. [דוח הבדיקות](TEST_REPORT.md) מפריד בין בדיקות קוד, fixture בדפדפן ותרחישים שטרם אומתו.
 
 [קובץ הסקריפט](dist/chat-studio.user.js) · [מדריך התקנה](docs/installation.md) · [מדריך משתמש](docs/user-guide.md) · [קוד אתר התיעוד](website/index.html) · [הסבר V15.3 המקורי](docs/original/Chat-Studio-V15.3-הסבר.txt)
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat Studio · Prozi
 // @namespace    https://github.com/moishyf/chat-studio-prozi-userscript
-// @version      15.3.1-beta.3
+// @version      15.3.1-beta.4
 // @description  כל עיצובי Chat Studio V15.3 — גרסת הסקריפט והתוספות: פרוזי
 // @author       Original: לשכת הרב; Userscript conversion: Prozi
 // @copyright    כל הזכויות שמורות בס"ד: לשכת הרב

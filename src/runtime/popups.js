@@ -3,7 +3,9 @@
  * Observe visibility changes as well as insertions (Google reuses popup nodes).
  */
 function createPopupGuard(root=document) {
-  const selector='[role="tooltip"],[role="menu"],[role="dialog"],[role="alertdialog"],[role="listbox"]';
+  // Google's reaction-participant card has no ARIA role (observed in Gmail).
+  // Match its specific component, not arbitrary positioned message content.
+  const selector='[role="tooltip"],[role="menu"],[role="dialog"],[role="alertdialog"],[role="listbox"],.qLAxZc[jsname="RxHuXc"]';
   const candidates=new Set(),applied=new Map(),timers=new Set();let observer=null,frame=0;
   const own=e=>e.closest?.('#cs-panel,.cs-root,.cs-asset,.cs-imglayer,.cs-wa-meta');
   function collect(e){if(!e?.querySelectorAll||own(e))return;if(e.matches?.(selector))candidates.add(e);for(const p of e.querySelectorAll(selector))if(!own(p))candidates.add(p);}

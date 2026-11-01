@@ -54,6 +54,21 @@ document.getElementById('run-checks').onclick=async()=>{
  trigger.blur();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
  check('CSS-only popup closes without leaving raised layers',!cssPopup.classList.contains('cs-popup-raised'));
  trigger.remove();cssPopup.remove();quote.remove();quoteBubble.classList.remove('native-quote','cs-hold');
+ // Real Gmail structure: roleless card in a sibling reaction list, behind a held bubble.
+ quoteBubble.classList.add('cs-hold');quoteBubble.scrollIntoView({block:'center'});
+ const reactionList=document.createElement('div');reactionList.setAttribute('role','list');
+ const reactionItem=document.createElement('div');reactionItem.setAttribute('role','listitem');reactionItem.style.position='relative';
+ const participantCard=document.createElement('div');participantCard.className='qLAxZc';participantCard.setAttribute('jsname','RxHuXc');
+ participantCard.textContent='מגיבים לדוגמה';participantCard.style.cssText='position:absolute;z-index:10;top:0;left:0;width:180px;height:70px;background:white';
+ reactionItem.append(participantCard);reactionList.append(reactionItem);quoteBubble.parentElement.append(reactionList);
+ const bubbleRect=quoteBubble.getBoundingClientRect(),itemRect=reactionItem.getBoundingClientRect();
+ participantCard.style.left=(bubbleRect.left-itemRect.left)+'px';participantCard.style.top=(bubbleRect.top-itemRect.top)+'px';
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ const cardRect=participantCard.getBoundingClientRect(),cardHit=document.elementFromPoint(cardRect.left+20,cardRect.top+20);
+ check('Roleless Gmail participant card paints above held bubble',cardHit===participantCard||participantCard.contains(cardHit));
+ participantCard.hidden=true;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ check('Closing roleless card restores reaction row layers',!reactionItem.classList.contains('cs-popup-raised'));
+ reactionList.remove();quoteBubble.classList.remove('cs-hold');
  api.update({onChat:false});check('Disable removes styled bubbles',document.querySelectorAll('.cs-msg').length===0);api.update({onChat:true});
  document.getElementById('messages').scrollTop=0;
  document.getElementById('results').textContent=lines.join('\n');
