@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Chat Studio - מעצב צ'אט מתקדם",
+  "version": "15.3.0",
+  "description": "מאות עיצובים, רקעים, הנפשות ואפקטים ל-Google Chat ול-Chat שבתוך Gmail, עם אפשרות לעיצוב נפרד לכל חשבון.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.google.com/*",
+        "https://mail.google.com/*"
+      ],
+      "all_frames": true,
+      "match_origin_as_fallback": true,
+      "css": [
+        "styles.css"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://ogs.google.com/*"
+      ],
+      "all_frames": true,
+      "js": [
+        "accounts.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "img/*"
+      ],
+      "matches": [
+        "https://chat.google.com/*",
+        "https://mail.google.com/*"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://accounts.google.com/*"
+  ]
+}

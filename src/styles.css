@@ -1,0 +1,377 @@
+/* ================= Chat Studio v15 — static styles ================= */
+
+/* ---------- Toolbar button ---------- */
+.cs-root { display: inline-flex !important; align-items: center; position: relative; flex: none; }
+.cs-btn {
+  all: unset; box-sizing: border-box; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; position: relative;
+  display: inline-flex !important; align-items: center; justify-content: center; margin: 0 2px;
+  transition: background .25s, transform .3s cubic-bezier(.2,.9,.3,1.5);
+}
+.cs-btn svg { width: 22px; height: 22px; pointer-events: none; transition: transform .45s cubic-bezier(.2,.9,.3,1.6); }
+.cs-btn::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 2px solid transparent;
+  background: linear-gradient(135deg,#7c5cff,#00c9c8,#ff6b9d) border-box; -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transform: scale(.7); transition: .35s; }
+.cs-btn:hover { background: rgba(124,92,255,.1); }
+.cs-btn:hover svg { transform: rotate(-20deg) scale(1.15); }
+.cs-btn:hover::after, .cs-btn.cs-active::after { opacity: 1; transform: scale(1); animation: cs-spin 3s linear infinite; }
+.cs-btn.cs-fab { position: fixed; bottom: 96px; left: 22px; z-index: 2147483000; width: 50px; height: 50px;
+  background: linear-gradient(135deg,#7c5cff,#00c9c8); box-shadow: 0 10px 28px rgba(124,92,255,.5); animation: cs-float 3s ease-in-out infinite; }
+.cs-btn.cs-fab svg { filter: brightness(0) invert(1); }
+@keyframes cs-float { 50% { transform: translateY(-4px) } }
+@keyframes cs-spin { to { transform: rotate(360deg) } }
+
+/* ---------- Panel ---------- */
+#cs-panel {
+  position: fixed; width: min(384px, calc(100vw - 16px)); max-height: min(640px, calc(100vh - 16px)); z-index: 2147483001;
+  display: flex; flex-direction: column; isolation: isolate; overflow: hidden;
+  border-radius: 24px; padding: 14px 14px 10px; font: 13px/1.4 "Google Sans", Roboto, Arial, sans-serif; text-align: start;
+  background: rgba(255,255,255,.84); backdrop-filter: blur(26px) saturate(1.8); -webkit-backdrop-filter: blur(26px) saturate(1.8);
+  border: 1px solid rgba(255,255,255,.75); color: #1d1b2e;
+  box-shadow: 0 30px 80px rgba(30,20,80,.3), 0 0 0 1px rgba(124,92,255,.12);
+  opacity: 0; transform: translateY(16px) scale(.94); pointer-events: none; visibility: hidden;
+  transition: opacity .32s cubic-bezier(.2,.9,.3,1.2), transform .32s cubic-bezier(.2,.9,.3,1.25), visibility .32s;
+}
+#cs-panel.cs-open { opacity: 1; transform: none; pointer-events: auto; visibility: visible; }
+#cs-panel::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; z-index: 2;
+  background: linear-gradient(90deg,#7c5cff,#00c9c8,#ff6b9d,#ffd166,#7c5cff); background-size: 300% 100%; animation: cs-flow 6s linear infinite; }
+#cs-panel::after { content: ""; position: absolute; inset: -50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, rgba(124,92,255,.16), transparent 30%), radial-gradient(circle at 70% 65%, rgba(0,201,200,.14), transparent 30%), radial-gradient(circle at 60% 25%, rgba(255,107,157,.1), transparent 25%);
+  animation: cs-spin 30s linear infinite; }
+#cs-panel.cs-dark { background: rgba(18,18,30,.9); color: #ecebff; border-color: rgba(255,255,255,.08); }
+#cs-panel * { box-sizing: border-box; font-family: inherit; }
+#cs-panel ::-webkit-scrollbar { width: 6px; height: 0 } #cs-panel ::-webkit-scrollbar-thumb { background: rgba(124,92,255,.4); border-radius: 6px }
+
+.cs-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cs-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cs-title b { white-space: nowrap; background: linear-gradient(90deg,#7c5cff,#00c9c8,#ff6b9d,#7c5cff); background-size: 300% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: cs-shine 6s linear infinite; }
+.cs-title svg { width: 26px; height: 26px; flex: none; }
+@keyframes cs-shine { to { background-position: 300% center } }
+.cs-hbtns { display: flex; gap: 6px; flex: none; }
+.cs-ib { all: unset; box-sizing: border-box; height: 32px; min-width: 32px; padding: 0 9px; border-radius: 11px; cursor: pointer;
+  background: rgba(127,127,170,.14); font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 5px; transition: .25s; }
+.cs-ib:hover { background: rgba(124,92,255,.22); transform: translateY(-1px); }
+.cs-ib svg { width: 17px; height: 17px; transition: transform .5s cubic-bezier(.2,.9,.3,1.6); }
+.cs-ib:hover svg { transform: rotate(180deg) scale(1.1); }
+.cs-ib.cs-grad { background: linear-gradient(135deg,#7c5cff,#00c9c8); color: #fff; box-shadow: 0 4px 14px rgba(124,92,255,.4); }
+
+.cs-tabs { display: flex; gap: 4px; padding: 4px; margin: 10px 0 8px; border-radius: 15px; background: rgba(127,127,170,.12); flex: none; }
+.cs-tab { all: unset; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 2px 6px; border-radius: 11px;
+  cursor: pointer; font-size: 11px; font-weight: 800; opacity: .75; transition: .3s; }
+.cs-tab svg { width: 21px; height: 21px; transition: transform .4s cubic-bezier(.2,.9,.3,1.7); }
+.cs-tab:hover { opacity: 1; } .cs-tab:hover svg { transform: translateY(-2px) scale(1.12); }
+.cs-tab.cs-on { opacity: 1; background: #fff; color: #5b3df5; box-shadow: 0 4px 16px rgba(124,92,255,.25); }
+#cs-panel.cs-dark .cs-tab.cs-on { background: rgba(255,255,255,.1); color: #c4b5fd; }
+
+.cs-body { flex: 1; overflow-y: auto; overflow-x: hidden; margin: 0 -6px; padding: 2px 6px 8px; min-height: 120px; }
+.cs-sec { margin: 14px 2px 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .4px; opacity: .72; display: flex; align-items: center; gap: 7px; }
+.cs-sec:first-child { margin-top: 4px; }
+.cs-sec svg { width: 17px; height: 17px; }
+.cs-banner { margin: 2px 0 8px; padding: 8px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 700;
+  background: linear-gradient(135deg,rgba(124,92,255,.15),rgba(0,201,200,.12)); }
+
+.cs-search { position: relative; margin-bottom: 6px; }
+.cs-search svg { position: absolute; top: 50%; inset-inline-start: 11px; width: 16px; height: 16px; transform: translateY(-50%); pointer-events: none; }
+.cs-search .cs-input { width: 100%; padding-inline-start: 34px; }
+
+.cs-chips { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: none; scroll-behavior: smooth; }
+.cs-chip { all: unset; flex: none; white-space: nowrap; padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 800; cursor: pointer;
+  background: rgba(127,127,170,.13); transition: .25s; display: inline-flex; align-items: center; gap: 5px; }
+.cs-chip svg { width: 14px; height: 14px; }
+.cs-chip:hover { background: rgba(124,92,255,.2); transform: translateY(-1px); }
+.cs-chip.cs-on { background: linear-gradient(135deg,#7c5cff,#00c9c8); color: #fff; box-shadow: 0 4px 14px rgba(124,92,255,.38); }
+
+.cs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.cs-grid.cs-g4 { grid-template-columns: repeat(4,1fr); }
+.cs-grid.cs-g5 { grid-template-columns: repeat(5,1fr); gap: 6px; }
+.cs-fitcard { height: 64px !important; display: flex; align-items: center; justify-content: center; background: rgba(127,127,170,.1); }
+.cs-fitcard svg { width: 34px; height: 34px; margin-bottom: 14px; }
+.cs-grid > * { animation: cs-cardin .4s cubic-bezier(.2,.9,.3,1.3) both; }
+@keyframes cs-cardin { from { opacity: 0; transform: translateY(10px) scale(.92) } }
+.cs-card { position: relative; height: 76px; border-radius: 15px; cursor: pointer; overflow: hidden; border: 2px solid rgba(127,127,170,.12);
+  transition: transform .28s cubic-bezier(.2,.9,.3,1.5), box-shadow .28s, border-color .2s; }
+.cs-g4 .cs-card { height: 62px; }
+.cs-card:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 24px rgba(0,0,0,.2); z-index: 1; }
+.cs-card.cs-sel { border-color: #7c5cff; box-shadow: 0 0 0 3px rgba(124,92,255,.3); }
+.cs-card.cs-sel::after { content: ""; position: absolute; top: 5px; inset-inline-end: 5px; width: 18px; height: 18px; border-radius: 50%; z-index: 3;
+  background: #7c5cff;
+  animation: cs-pop .4s cubic-bezier(.2,.9,.3,1.8); box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+@keyframes cs-pop { from { transform: scale(0) rotate(-120deg) } }
+.cs-lbl { position: absolute; bottom: 5px; inset-inline-start: 5px; max-width: calc(100% - 10px); padding: 1px 7px; border-radius: 7px; z-index: 2;
+  font-size: 10.5px; font-weight: 800; line-height: 1.35; background: rgba(0,0,0,.5); color: #fff; backdrop-filter: blur(4px);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-lbl small { font-weight: 600; opacity: .8; font-size: 9.5px; margin-inline-start: 3px; }
+.cs-bub { position: absolute; height: 13px; z-index: 1; }
+.cs-bub.b1 { top: 9px; inset-inline-start: 8px; width: 58%; }
+.cs-bub.b2 { top: 28px; inset-inline-end: 8px; width: 46%; }
+.cs-fav { all: unset; position: absolute; top: 4px; inset-inline-start: 4px; width: 20px; height: 20px; border-radius: 50%; z-index: 3; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.35); opacity: 0; transform: scale(.6); transition: .25s cubic-bezier(.2,.9,.3,1.6); }
+.cs-fav svg { width: 13px; height: 13px; }
+.cs-card:hover .cs-fav, .cs-fav.cs-on { opacity: 1; transform: scale(1); }
+.cs-fav:hover { transform: scale(1.25) !important; }
+.cs-x { all: unset; position: absolute; top: 4px; inset-inline-start: 4px; width: 20px; height: 20px; border-radius: 50%; z-index: 3; cursor: pointer;
+  background: rgba(0,0,0,.55); color: #fff; font-size: 13px; font-weight: 800; line-height: 20px; text-align: center; }
+.cs-empty { grid-column: 1 / -1; padding: 22px 10px; text-align: center; font-size: 12px; opacity: .65; }
+
+/* demo bubble (entry animations / shapes / fonts) */
+.cs-demo { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#f1efff,#e3fbfb); }
+#cs-panel.cs-dark .cs-demo { background: linear-gradient(135deg,#232340,#14303a); }
+.cs-db { width: 62%; height: 20px; border-radius: 12px 12px 12px 4px; background: linear-gradient(135deg,#7c5cff,#00c9c8); box-shadow: 0 4px 10px rgba(124,92,255,.35); margin-bottom: 14px; }
+.cs-ecard:hover .cs-db, .cs-ecard.cs-sel .cs-db { animation: var(--a) 1.5s cubic-bezier(.2,.9,.3,1.2) infinite both; }
+.cs-fxcard { display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 30%, #2a2d52, #0e1020); }
+.cs-fxcard svg { width: 44px; height: 44px; margin-bottom: 14px; }
+.cs-fontcard { height: auto !important; padding: 10px 10px 26px; font-size: 15px; display: flex; align-items: center; justify-content: center; text-align: center;
+  background: rgba(127,127,170,.08); }
+
+.cs-seg { display: flex; background: rgba(127,127,170,.13); border-radius: 13px; padding: 3px; gap: 3px; }
+.cs-seg button { all: unset; flex: 1; text-align: center; padding: 8px 4px; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 800; transition: .25s; }
+.cs-seg button:hover { background: rgba(124,92,255,.12); }
+.cs-seg button.cs-on { background: linear-gradient(135deg,#7c5cff,#00c9c8); color: #fff; box-shadow: 0 4px 14px rgba(124,92,255,.4); }
+
+.cs-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+.cs-input { min-width: 0; flex: 1; border: 1px solid rgba(127,127,170,.35); background: rgba(255,255,255,.65); color: inherit;
+  border-radius: 11px; padding: 9px 11px; font-size: 12px; outline: none; transition: .2s; }
+#cs-panel.cs-dark .cs-input { background: rgba(255,255,255,.07); }
+.cs-input:focus { border-color: #7c5cff; box-shadow: 0 0 0 3px rgba(124,92,255,.22); }
+.cs-pb { all: unset; box-sizing: border-box; border-radius: 11px; padding: 9px 13px; cursor: pointer; font-size: 12px; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg,#7c5cff,#00c9c8); display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: .25s; white-space: nowrap; }
+.cs-pb.cs-full { flex: 1; }
+.cs-pb.cs-ghost { background: rgba(127,127,170,.15); color: inherit; }
+.cs-pb:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(124,92,255,.4); }
+.cs-pb svg { width: 15px; height: 15px; }
+
+.cs-sw { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 4px; font-size: 13px; cursor: pointer; border-radius: 10px; transition: background .2s; }
+.cs-sw:hover { background: rgba(124,92,255,.07); }
+.cs-sw small { display: block; font-size: 11px; opacity: .6; }
+.cs-tg { position: relative; width: 42px; height: 24px; border-radius: 24px; background: rgba(127,127,170,.38); transition: .3s; flex: none; }
+.cs-tg::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff;
+  transition: .35s cubic-bezier(.2,.9,.3,1.6); box-shadow: 0 2px 5px rgba(0,0,0,.25); }
+.cs-tg.cs-on { background: linear-gradient(135deg,#7c5cff,#00c9c8); }
+.cs-tg.cs-on::after { inset-inline-start: 21px; }
+.cs-range { width: 100%; accent-color: #7c5cff; }
+.cs-note { font-size: 11px; opacity: .6; }
+.cs-hide { display: none !important; }
+.cs-dim { opacity: .55; }
+
+.cs-credit { display: flex; align-items: center; justify-content: center; gap: 7px; width: fit-content; margin: 16px auto 4px; padding: 7px 15px;
+  border-radius: 999px; font-size: 12px; font-weight: 800; text-decoration: none !important; position: relative; overflow: hidden; cursor: pointer;
+  background: linear-gradient(135deg, rgba(124,92,255,.13), rgba(0,201,200,.13)); border: 1px solid rgba(124,92,255,.3);
+  transition: transform .3s cubic-bezier(.2,.9,.3,1.5), box-shadow .3s; animation: cs-credit-in .7s cubic-bezier(.2,.9,.3,1.3) both; }
+.cs-credit b { background: linear-gradient(90deg,#7c5cff,#00c9c8,#ff6b9d,#7c5cff); background-size: 300% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cs-shine 5s linear infinite; font-weight: 800; }
+.cs-credit svg { width: 15px; height: 15px; flex: none; }
+.cs-credit::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%); background-size: 250% 100%; animation: cs-sheen 4s ease-in-out infinite; pointer-events: none; }
+.cs-credit:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 20px rgba(124,92,255,.32); }
+@keyframes cs-credit-in { from { opacity: 0; transform: translateY(8px) scale(.9) } }
+.cs-toast { position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 2147483002; background: #1d1b2e; color: #fff;
+  padding: 10px 18px; border-radius: 14px; font: 700 13px Roboto, Arial; box-shadow: 0 10px 30px rgba(0,0,0,.3); animation: cs-e-rise .4s both; }
+
+.cs-fx { position: fixed; pointer-events: none; z-index: 5; }
+
+/* ================= Messages (theme rules are generated at runtime) ================= */
+.cs-msg { box-sizing: border-box; }
+html.cs-on .cs-msg { line-height: 1.5 !important; word-break: break-word; transition: transform .25s ease, box-shadow .3s ease; }
+html.cs-on .cs-msg a { text-decoration: underline !important; }
+html.cs-on .cs-msg.cs-solo { display: inline-block !important; max-width: min(100%, 700px) !important; width: fit-content !important; }
+html.cs-on .cs-msg.cs-solo { position: relative; }
+/* quoted replies / link cards inside the bubble: translucent version of the theme, readable text (also for content that loads later) */
+/* quote boxes / link cards keep Google's background; their text is matched to that background so it is always readable */
+html.cs-on .cs-msg .cs-box.cs-light { color: #1f1f1f !important; text-shadow: none !important; font-weight: 400; }
+html.cs-on .cs-msg .cs-box.cs-dark { color: #f1f3f4 !important; text-shadow: none !important; font-weight: 400; }
+html.cs-on .cs-msg .cs-box { border-radius: 12px; }
+html.cs-on .cs-msg .cs-txt { background: transparent !important; }
+/* Google's own floating UI inside a bubble is never restyled */
+html.cs-on .cs-keep { text-shadow: none !important; }
+/* a bubble that holds an open Google popup (tooltip, menu, dialog): no transform / filter / animation / opacity,
+   which would move the popup or make it see-through, and it sits above its neighbours */
+html.cs-on .cs-msg.cs-hold { transform: none !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; animation: none !important; opacity: 1 !important; }
+html.cs-on .cs-msg.cs-pos.cs-hold { z-index: 60 !important; }
+html.cs-on .cs-ontop { z-index: 1000 !important; }
+@keyframes cs-sheen2 { 0% { background-position: 150% 0, 0 0 } 60%, 100% { background-position: -100% 0, 0 0 } }
+
+/* uploaded-image background layer (canvas, so it never depends on the page's image policy) */
+.cs-il-host { isolation: isolate; }
+.cs-imglayer { pointer-events: none; display: block; z-index: -1; }
+.cs-imglayer.cs-il-sticky { position: sticky; top: 0; }
+.cs-imglayer.cs-il-fixed { position: fixed; top: 0; left: 0; }
+.cs-thumb { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cs-custom { padding: 10px; border-radius: 16px; background: rgba(127,127,170,.09); margin-bottom: 8px; }
+.cs-colors { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.cs-colors label { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.cs-colors input[type=color] { all: unset; width: 100%; height: 34px; border-radius: 11px; cursor: pointer; box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), 0 3px 10px rgba(0,0,0,.15); }
+.cs-colors input[type=color]::-webkit-color-swatch-wrapper { padding: 0; } .cs-colors input[type=color]::-webkit-color-swatch { border: none; border-radius: 11px; }
+
+@keyframes cs-flow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes cs-sheen { 0%{background-position:150% 0} 60%,100%{background-position:-100% 0} }
+@keyframes cs-flick { 0%,92%,100% { opacity: 1 } 93% { opacity: .7 } 95% { opacity: 1 } 96% { opacity: .85 } }
+@keyframes cs-pulse { 0% { box-shadow: 0 0 0 0 var(--cs-pc) } 100% { box-shadow: 0 0 0 12px transparent } }
+@keyframes cs-wiggle { 25% { transform: rotate(-2deg) } 50% { transform: rotate(2deg) } 75% { transform: rotate(-1deg) } }
+
+/* entry animations */
+@keyframes cs-e-fade { from { opacity: 0 } }
+@keyframes cs-e-rise { from { opacity: 0; transform: translateY(14px) } }
+@keyframes cs-e-pop { 0% { opacity: 0; transform: scale(.6) } 70% { transform: scale(1.06) } 100% { opacity: 1; transform: none } }
+@keyframes cs-e-slide { from { opacity: 0; transform: translateX(-36px) } }
+@keyframes cs-e-zoom { from { opacity: 0; transform: scale(1.45) } }
+@keyframes cs-e-flip { from { opacity: 0; transform: perspective(500px) rotateX(-85deg) } }
+@keyframes cs-e-blur { from { opacity: 0; filter: blur(10px); transform: scale(.95) } }
+@keyframes cs-e-bounce { 0% { opacity: 0; transform: translateY(-30px) } 50% { opacity: 1; transform: translateY(6px) } 72% { transform: translateY(-3px) } 100% { transform: none } }
+@keyframes cs-e-swing { 0% { opacity: 0; transform: rotate(-14deg); transform-origin: top left } 60% { transform: rotate(4deg) } 100% { opacity: 1; transform: none } }
+@keyframes cs-e-drop { from { opacity: 0; transform: translateY(-44px) scale(.9) } }
+@keyframes cs-e-spin { from { opacity: 0; transform: rotate(-200deg) scale(.3) } }
+@keyframes cs-e-elastic { 0% { opacity: 0; transform: scaleX(.3) } 40% { opacity: 1; transform: scaleX(1.15) } 60% { transform: scaleX(.92) } 80% { transform: scaleX(1.04) } 100% { transform: none } }
+@keyframes cs-e-glitch { 0% { opacity: 0; transform: translate(-6px,0); filter: hue-rotate(90deg) } 20% { opacity: 1; transform: translate(5px,-2px) } 40% { transform: translate(-3px,2px); filter: hue-rotate(-90deg) } 60% { transform: translate(2px,0) } 100% { transform: none; filter: none } }
+@keyframes cs-e-unfold { from { opacity: 0; clip-path: inset(0 0 0 100%) } to { opacity: 1; clip-path: inset(0) } }
+@keyframes cs-e-float { from { opacity: 0; transform: translateY(22px) rotate(-3deg) } }
+@keyframes cs-e-roll { from { opacity: 0; transform: translateX(-60px) rotate(-120deg) } }
+@keyframes cs-e-stretch { 0% { opacity: 0; transform: scaleY(.1) } 60% { opacity: 1; transform: scaleY(1.12) } 100% { transform: none } }
+@keyframes cs-e-fold { from { opacity: 0; transform: perspective(600px) rotateY(90deg) } }
+@keyframes cs-e-rubber { 0% { opacity: 0; transform: scale(.5) } 30% { opacity: 1; transform: scale(1.25,.75) } 45% { transform: scale(.85,1.15) } 60% { transform: scale(1.08,.92) } 100% { transform: none } }
+@keyframes cs-e-skew { from { opacity: 0; transform: skewX(-25deg) translateX(-30px) } }
+@keyframes cs-hpulse { 50% { transform: scale(1.035) } }
+@keyframes cs-hfloat { 50% { transform: translateY(-4px) } }
+
+/* ---------- Chat background ---------- */
+.cs-chat-bg { transition: background-color .4s ease; }
+.cs-chat-pane.cs-bg-move { animation: cs-flow 24s steps(48) infinite; }
+/* moving backgrounds slide on their own GPU layer, so the messages above them are never repainted */
+.cs-bgl { position: absolute !important; inset: 0 !important; z-index: -1 !important; overflow: hidden; pointer-events: none; border-radius: inherit; contain: strict; }
+.cs-bgl-in { position: absolute; left: 0; top: 0; width: 300%; height: 300%; background-size: 100% 100%; will-change: transform; animation: cs-drift 36s ease-in-out infinite alternate; }
+@keyframes cs-drift { from { transform: translate3d(0,0,0) } to { transform: translate3d(-66.666%,-66.666%,0) } }
+html.cs-lite .cs-bgl-in { animation: none; }
+html.cs-bgmode .cs-chat-bg:not(.cs-chat-pane), html.cs-bgmode .cs-clear { background-color: transparent !important; background-image: none !important; box-shadow: none !important; border-color: transparent !important; }
+html.cs-bgmode .cs-clear::before, html.cs-bgmode .cs-clear::after { background-color: transparent !important; background-image: none !important; box-shadow: none !important; border-color: transparent !important; }
+/* top bar / composer bar: frosted glass over the chosen background */
+html.cs-bgmode .cs-bar { background: rgba(255,255,255,.44) !important; backdrop-filter: blur(14px) saturate(1.6); -webkit-backdrop-filter: blur(14px) saturate(1.6); box-shadow: 0 1px 0 rgba(0,0,0,.05) !important; }
+html.cs-lite.cs-bgmode .cs-bar { background: rgba(255,255,255,.72) !important; }
+html.cs-bgmode .cs-chat-pane .cs-bar { transition: background .3s; }
+/* over dark backgrounds the bars turn dark too, with light text (anything with its own colour keeps it) */
+html.cs-bgmode.cs-bgdark .cs-bar { background: rgba(16,18,28,.46) !important; box-shadow: 0 1px 0 rgba(255,255,255,.06) !important; }
+html.cs-bgmode.cs-bgdark .cs-bar.cs-bt, html.cs-bgmode.cs-bgdark .cs-bar .cs-bt, html.cs-bgmode.cs-bgdark .cs-cbar .cs-bt { color: #e9edef !important; }
+html.cs-bgmode.cs-bgdark .cs-bk-l { color: #1f1f1f !important; }
+html.cs-bgmode.cs-bgdark .cs-bk-d { color: #f1f3f4 !important; }
+.cs-imglayer.cs-il-abs { position: absolute; inset: 0; width: 100%; height: 100%; }
+html.cs-bgdark .cs-chat-bg { color: #e9edef; }
+html.cs-bgmode.cs-bgdark .cs-meta, html.cs-bgmode.cs-bgdark .cs-meta .cs-c { color: #eef0f4 !important; text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+
+/* ---------- Gmail inbox mode ---------- */
+html.cs-mail, html.cs-mail body { background-attachment: fixed !important; }
+html.cs-mail { background: transparent !important; }
+html.cs-mail .cs-mclear { background-color: transparent !important; background-image: none !important; }
+html.cs-mail.cs-mdark .cs-mclear { background-color: rgba(255,255,255,.55) !important; }
+html.cs-mail .cs-mglass { background: rgba(255,255,255,.74) !important; backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,.12) !important; }
+html.cs-mail.cs-mdark .cs-mglass { background: rgba(255,255,255,.84) !important; }
+html.cs-mail :is(.aeF,.AO,.Tm,.bkK,.aeN,.no,.bGI,.ae4,.aDP,.Cp,.zt,.aKh,.G-atb,.nH.oy8Mbf,.aqJ,.Nr,.D.E,.aeH,.aKz,.wl4W9b,.yP,.nH.ar4) { background: transparent !important; }
+html.cs-mail tr.zA { background: rgba(255,255,255,.55) !important; transition: box-shadow .25s, background .25s; }
+html.cs-mail tr.zA:hover { box-shadow: inset 0 0 0 1px rgba(124,92,255,.35), 0 4px 14px rgba(0,0,0,.12) !important; }
+html.cs-mail tr.zA.zE { background: rgba(255,255,255,.85) !important; }
+
+
+/* ================= WhatsApp look ================= */
+/* bubbles: WhatsApp colours come from the theme; the first bubble of each run gets the little tail and a square corner */
+html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="l"] { border-top-left-radius: 0 !important; }
+html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="r"] { border-top-right-radius: 0 !important; }
+html.cs-wa.cs-on .cs-msg.cs-pos.cs-first[data-cs-edge]:not(.cs-hold)::after { content: ""; position: absolute; top: 0; width: 8px; height: 13px; background: var(--cs-wb, #fff); pointer-events: none; }
+html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="l"]::after { left: -8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+html.cs-wa.cs-on .cs-msg.cs-first[data-cs-edge="r"]::after { right: -8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+
+/* time + ticks inside the bubble, at the end of the last line (moves to its own line only when there is no room).
+   Not positioned, so it can never cover a Google popup from a neighbouring message. */
+.cs-wa-meta { float: inline-end; display: inline-flex; align-items: center; gap: 3px; height: 15px; margin: 3px 0 -5px; margin-inline-start: 10px;
+  font: 400 11px/15px system-ui, "Segoe UI", Helvetica, Arial, sans-serif !important; letter-spacing: 0; white-space: nowrap; direction: ltr; text-shadow: none !important;
+  color: color-mix(in srgb, currentColor 58%, transparent); pointer-events: none; user-select: none; -webkit-user-select: none; }
+.cs-wa-time { font-variant-numeric: tabular-nums; }
+html.cs-wa .cs-wa-meta { color: #667781; }
+html.cs-wa.cs-wadk .cs-wa-meta { color: rgba(233,237,239,.6); }
+.cs-tick { width: 16px; height: 11px; flex: none; transition: color .4s ease; }
+.cs-tick-sending { width: 14px; }
+.cs-tick-sent, .cs-tick-delivered, .cs-tick-sending { color: #8696a0; }
+html.cs-wa:not(.cs-wadk) .cs-msg .cs-tick:not(.cs-tick-read) { color: #667781; }
+.cs-tick-read { color: #53bdeb !important; }
+.cs-tick-pop { animation: cs-tickpop .5s cubic-bezier(.2,.9,.3,1.8); }
+@keyframes cs-tickpop { 0% { transform: scale(.6) } 60% { transform: scale(1.25) } 100% { transform: none } }
+
+/* quoted reply, WhatsApp style */
+html.cs-wa.cs-on .cs-msg .cs-box { background: rgba(11,20,26,.05) !important; border-inline-start: 4px solid #06cf9c !important; border-radius: 7.5px !important; color: #54656f !important; box-shadow: none !important; }
+html.cs-wa.cs-on .cs-msg.cs-me .cs-box { background: rgba(11,20,26,.06) !important; border-inline-start-color: #53bdeb !important; }
+html.cs-wa.cs-wadk.cs-on .cs-msg .cs-box { background: rgba(0,0,0,.22) !important; color: rgba(233,237,239,.78) !important; }
+
+/* sender names in colour, one colour per person; the rest of the line in WhatsApp grey */
+html.cs-wa .cs-meta [data-name], html.cs-wa .cs-meta [data-hovercard-id], html.cs-wa .cs-meta [data-member-id] { color: hsl(var(--cs-hue, 160) 62% 38%) !important; font-weight: 600; }
+html.cs-wa.cs-wadk .cs-meta [data-name], html.cs-wa.cs-wadk .cs-meta [data-hovercard-id], html.cs-wa.cs-wadk .cs-meta [data-member-id] { color: hsl(var(--cs-hue, 160) 70% 68%) !important; }
+html.cs-wa.cs-bgmode .cs-meta .cs-c:not([data-name]):not([data-hovercard-id]):not([data-member-id]) { color: #667781 !important; text-shadow: none !important; }
+html.cs-wa.cs-wadk.cs-bgmode .cs-meta .cs-c:not([data-name]):not([data-hovercard-id]):not([data-member-id]) { color: rgba(233,237,239,.6) !important; }
+
+/* like WhatsApp, your own messages don't repeat your name and the time above them (the time is inside the bubble) */
+html.cs-wa.cs-on .cs-meta.cs-meta-me :is([data-name],[data-hovercard-id],[data-member-id],[data-absolute-timestamp]) { display: none !important; }
+/* WhatsApp header and input bar */
+html.cs-wa.cs-bgmode .cs-bar { background: #f0f2f5 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: 0 1px 0 rgba(11,20,26,.08) !important; }
+html.cs-wa.cs-bgmode .cs-clear.cs-cbar { background-color: #f0f2f5 !important; }
+html.cs-wa.cs-wadk.cs-bgmode .cs-bar, html.cs-wa.cs-wadk.cs-bgmode .cs-clear.cs-cbar { background: #202c33 !important; box-shadow: none !important; }
+html.cs-wa.cs-wadk.cs-bgmode .cs-bar.cs-bt, html.cs-wa.cs-wadk.cs-bgmode .cs-bar .cs-bt, html.cs-wa.cs-wadk.cs-bgmode .cs-cbar .cs-bt { color: #e9edef !important; }
+html.cs-wa.cs-bgmode .cs-pill { background: #ffffff !important; border-radius: 8px !important; box-shadow: none !important; border-color: transparent !important; }
+html.cs-wa.cs-wadk.cs-bgmode .cs-pill { background: #2a3942 !important; }
+html.cs-wa.cs-wadk.cs-bgmode .cs-pill, html.cs-wa.cs-wadk.cs-bgmode .cs-pill :is([contenteditable], [role="textbox"], textarea, [role="button"], button, span, div) { color: #d1d7db !important; }
+
+/* WhatsApp theme cards in the panel */
+.cs-wacard { padding: 7px 8px 24px; display: flex; flex-direction: column; gap: 4px; font-family: system-ui, "Segoe UI", Arial, sans-serif; }
+.cs-wab { max-width: 92%; overflow: hidden; padding: 2px 5px; border-radius: 6px; font-size: 9.5px; line-height: 13px; color: #111b21; background: #fff; box-shadow: 0 1px .5px rgba(11,20,26,.13);
+  position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 5px; white-space: nowrap; }
+.cs-wab-them { align-self: flex-start; border-start-start-radius: 0; }
+.cs-wab-me { align-self: flex-end; background: #d9fdd3; border-start-end-radius: 0; }
+.cs-wab .cs-wa-meta { float: none; position: static; margin: 0; height: auto; font-size: 7.5px !important; line-height: 10px !important; color: #667781; flex: none; }
+.cs-wab .cs-tick { width: 11px; height: 8px; }
+.cs-wacard-dk .cs-wab { background: #202c33; color: #e9edef; }
+.cs-wacard-dk .cs-wab-me { background: #005c4b; }
+.cs-wacard-dk .cs-wab .cs-wa-meta { color: rgba(233,237,239,.6); }
+
+@media (prefers-reduced-motion: reduce) { .cs-msg, .cs-msg::before, .cs-chat-bg, #cs-panel::after { animation: none !important } }
+html.cs-lite .cs-bar, html.cs-lite .cs-mglass, html.cs-lite .cs-msg { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+/* the panel's decorative animations only run while it is open */
+#cs-panel:not(.cs-open)::before, #cs-panel:not(.cs-open)::after, #cs-panel:not(.cs-open) .cs-title b { animation: none; }
+
+/* panel refreshes after a change: no replay of the card animations */
+#cs-panel.cs-quiet .cs-grid > *, #cs-panel.cs-quiet .cs-credit { animation: none !important; }
+
+/* per-account designs */
+.cs-editbar { display: flex; align-items: center; gap: 8px; margin: 2px 0 10px; padding: 7px 9px; border-radius: 14px; font-size: 12px;
+  background: linear-gradient(135deg, rgba(124,92,255,.16), rgba(0,201,200,.14)); border: 1px solid rgba(124,92,255,.28); animation: cs-cardin .35s both; }
+.cs-eb-t { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+.cs-eb-t > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-eb-t small { opacity: .65; font-size: 10.5px; direction: ltr; text-align: start; }
+.cs-editbar .cs-pb { padding: 6px 12px; }
+.cs-av { flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff;
+  background: linear-gradient(135deg, hsl(var(--cs-hue,255) 70% 58%), hsl(calc(var(--cs-hue,255) + 40) 70% 46%)); box-shadow: 0 3px 10px hsla(var(--cs-hue,255),70%,50%,.35); }
+.cs-av-all { background: linear-gradient(135deg,#7c5cff,#00c9c8); }
+.cs-av svg { width: 18px; height: 18px; filter: brightness(0) invert(1); }
+.cs-accts { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.cs-acct { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 14px; cursor: pointer; background: rgba(127,127,170,.09); border: 2px solid transparent;
+  transition: background .2s, transform .25s cubic-bezier(.2,.9,.3,1.5), border-color .2s; animation: cs-cardin .35s both; }
+.cs-acct:hover { background: rgba(124,92,255,.13); transform: translateY(-1px); }
+.cs-acct.cs-on { border-color: #7c5cff; background: rgba(124,92,255,.12); }
+.cs-acct-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.cs-acct-t b { font-size: 12.5px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-acct-t small { font-size: 11px; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-badge { font-style: normal; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: linear-gradient(135deg,#7c5cff,#00c9c8); color: #fff; }
+.cs-acct-x { height: 28px; min-width: 28px; padding: 0 6px; flex: none; }
+
+.cs-av { position: relative; overflow: hidden; }
+.cs-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.cs-busy { animation: cs-flick 1.2s infinite; }
+.cs-warn { opacity: .85; color: #b45309; }
+#cs-panel.cs-dark .cs-warn { color: #fbbf24; }
+.cs-acct-cur { cursor: default; background: rgba(124,92,255,.08); margin-bottom: 4px; }
+.cs-acct-cur:hover { transform: none; }
+.cs-acct-cur .cs-av { width: 40px; height: 40px; font-size: 17px; }
+.cs-mail { unicode-bidi: plaintext; text-align: start; }
+#cs-panel[dir=rtl] .cs-mail { text-align: right; }
+.cs-eb-t b { font-size: 11.5px; }
+
+.cs-asset {pointer-events:none;display:block;overflow:hidden;width:100%;height:100%}
+.cs-asset-card {position:absolute;inset:0;z-index:0}
+.cs-asset-absolute {position:absolute;inset:0;z-index:-1}
+.cs-asset-fixed {position:fixed;inset:0;z-index:-1}
+.cs-asset-sticky {position:sticky;top:0;z-index:-1}
+.cs-card.cs-sel .cs-check {display:block}
+.cs-check {display:none;position:absolute;top:8.5px;inset-inline-end:8.5px;width:11px;height:11px;z-index:4;pointer-events:none}
+#cs-panel :focus-visible{outline:2px solid #7c5cff;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){#cs-panel *, .cs-btn, .cs-btn::after {animation:none!important;transition:none!important}}

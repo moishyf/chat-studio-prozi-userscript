@@ -1,0 +1,21 @@
+[
+  "core/context-state.js",
+  "core/accounts.js",
+  "core/helpers.js",
+  "core/i18n.js",
+  "core/icons.js",
+  "core/themes.js",
+  "core/options.js",
+  "core/backgrounds.js",
+  "core/images.js",
+  "core/messages.js",
+  "core/identity.js",
+  "core/receipts.js",
+  "core/theme-css.js",
+  "core/apply.js",
+  "core/chat-background.js",
+  "core/image-layers.js",
+  "core/gmail.js",
+  "core/effects.js",
+  "core/ui.js"
+]
