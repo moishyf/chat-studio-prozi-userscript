@@ -50,6 +50,6 @@ Node.js 22 ומעלה; אין חבילות להתקנה. פתחו `http://127.0.
 
 כל הזכויות שמורות בס״ד: [לשכת הרב](https://mitmachim.top/user/%D7%9C%D7%A9%D7%9B%D7%AA-%D7%94%D7%A8%D7%91). [הפרסום המקורי](https://mitmachim.top/post/1276567).
 
-**גרסת הסקריפט והתוספות: פרוזי** — Userscript conversion & additions: Prozi.
+**גרסת הסקריפט והתוספות: [פרוזי](https://mitmachim.top/user/%D7%A4%D7%A8%D7%95%D7%96%D7%99)** — Userscript conversion & additions: Prozi.
 
 לא הוסף רישיון קוד פתוח בשם היוצר. [פרטיות](docs/privacy.md) · [פתרון תקלות](docs/troubleshooting.md) · [מעבר מהתוסף](docs/migration.md).
